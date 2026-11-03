@@ -5,25 +5,58 @@ of scroll, your trackpad taps and a short click plays, like a notched wheel.
 
 ## Install
 
-You need macOS 14 (Sonoma) or later. Haptics need a Force Touch trackpad; the
-sound works on any Mac.
+You need a Mac with macOS 14 (Sonoma) or later. Haptics need a Force Touch
+trackpad, which most MacBooks from 2016 onwards have. The sound works on any Mac.
+
+### Ask Claude to install it
+
+If you have Claude Code, or the Code tab in the Claude desktop app, paste this
+message. Regular claude.ai chat can't run commands on your Mac, so use the
+Terminal steps below instead.
+
+```text
+Please install the Detent Mac app for me. Read the install steps at
+https://raw.githubusercontent.com/zeeshan20033/detent/main/README.md, check that
+my Mac runs macOS 14 or later, then run the commands under "Install with
+Terminal". I'm happy for you to remove the quarantine flag, because Detent isn't
+notarized by Apple. When you're done, tell me how to allow Accessibility access.
+```
+
+Claude can't turn on Accessibility for you. That's the one step you do yourself,
+under [Allow Accessibility](#allow-accessibility).
+
+### Install with Terminal
+
+Open **Terminal**, paste all of this and press Return:
+
+```bash
+cd "$(mktemp -d)"
+curl -fL -o Detent.zip https://github.com/zeeshan20033/detent/releases/download/v1.0/Detent-1.0.zip
+ditto -x -k Detent.zip .
+pkill -x Detent || true
+rm -rf /Applications/Detent.app
+mv Detent.app /Applications/
+xattr -dr com.apple.quarantine /Applications/Detent.app
+open /Applications/Detent.app
+```
+
+This downloads the app, replaces any older copy in Applications, and opens it.
+The `xattr` line removes the flag macOS uses to block apps that Apple hasn't
+notarized, so only run it if you trust this app.
+
+### Install by hand
 
 1. Download `Detent-1.0.zip` from the
    [latest release](https://github.com/zeeshan20033/detent/releases/latest).
 2. Unzip it and drag **Detent** into your **Applications** folder.
-3. Open **Terminal**, paste this line and press Return:
-
-   ```bash
-   xattr -dr com.apple.quarantine /Applications/Detent.app
-   ```
-
-   Detent isn't notarized by Apple, so macOS blocks it on first launch without
-   this step. If you'd rather not use Terminal, open the app once, then go to
+3. Open the app once. When macOS blocks it, go to
    **System Settings → Privacy & Security** and click **Open Anyway**.
 
-4. Open Detent and turn it on under
-   **System Settings → Privacy & Security → Accessibility**. macOS only reports
-   scrolling across all apps to apps that have this permission.
+### Allow Accessibility
+
+Turn on **Detent** under
+**System Settings → Privacy & Security → Accessibility**. macOS only reports
+scrolling across all apps to apps that have this permission.
 
 Detent starts working a moment after you allow it. Look for the waveform icon in
 your menu bar.
